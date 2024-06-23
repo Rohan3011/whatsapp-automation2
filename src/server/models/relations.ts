@@ -9,7 +9,7 @@ export const relationsTable = sqliteTable("relations", {
   chapter: text("chapter"),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
-    .default(new Date()),
+    .$defaultFn(() => new Date()),
   updatedAt: integer("updated_at", { mode: "timestamp" })
     .notNull()
     .$onUpdate(() => new Date()),

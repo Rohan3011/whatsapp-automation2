@@ -9,7 +9,7 @@ export const usersTable = sqliteTable("users", {
   email: text("email").notNull().unique(),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
-    .default(new Date()),
+    .$defaultFn(() => new Date()),
   updatedAt: integer("updated_at", { mode: "timestamp" })
     .notNull()
     .$onUpdate(() => new Date()),

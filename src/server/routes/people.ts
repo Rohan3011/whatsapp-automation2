@@ -4,13 +4,34 @@ import { eq } from "drizzle-orm";
 import { peopleTable } from "@/server/models/people";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
+import { peopleToRelationsTable } from "../models/people-to-relations";
 
 export const peopleRouter = new Hono();
 
 peopleRouter.post("/", async (c) => {
-  const person = await c.req.json();
   try {
-    const result = await db.insert(peopleTable).values(person).returning();
+    const { relations, ...person } = await c.req.json();
+
+    console.log("PERSON ID:", person);
+
+    const people = await db.insert(peopleTable).values(person).returning();
+
+    if (people.length === 0) {
+      throw new Error("Failed to insert person");
+    }
+
+    const personId = people[0].id;
+
+    // Insert the relations into the people_relations table
+    const relationsData = relations.map((relationId: string) => ({
+      person_id: personId,
+      relation_id: relationId,
+    }));
+
+    const result = await db
+      .insert(peopleToRelationsTable)
+      .values(relationsData);
+
     return c.json(result);
   } catch (error) {
     return c.json({ message: "Person creation failed", error }, 500);
@@ -32,7 +53,11 @@ peopleRouter.get(
     try {
       const person = await db
         .select()
-        .from(peopleTable)
+        .from(peopleToRelationsTable)
+        .leftJoin(
+          peopleTable,
+          eq(peopleToRelationsTable.personId, peopleTable.id)
+        )
         .limit(limit)
         .offset(page * limit);
 

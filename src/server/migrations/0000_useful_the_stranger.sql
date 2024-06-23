@@ -1,10 +1,16 @@
+CREATE TABLE `people_to_relations` (
+	`person_id` integer NOT NULL,
+	`relation_id` integer NOT NULL,
+	FOREIGN KEY (`person_id`) REFERENCES `people`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`relation_id`) REFERENCES `relations`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
 CREATE TABLE `people` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
 	`date_of_birth` text,
 	`salutation` text,
 	`meta_data` text,
-	`relation_id` text DEFAULT '[]' NOT NULL,
 	`additional_info` text,
 	`image` text,
 	`email` text,
@@ -15,16 +21,15 @@ CREATE TABLE `people` (
 	`company` text,
 	`social_link` text,
 	`ex` integer,
-	`created_at` text DEFAULT 'Sat Jun 22 2024' NOT NULL,
-	`updated_at` text NOT NULL,
-	FOREIGN KEY (`relation_id`) REFERENCES `relations`(`id`) ON UPDATE no action ON DELETE set null
+	`created_at` integer NOT NULL,
+	`updated_at` integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `relations` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
 	`chapter` text,
-	`created_at` integer DEFAULT '"2024-06-22T16:21:58.010Z"' NOT NULL,
+	`created_at` integer NOT NULL,
 	`updated_at` integer NOT NULL
 );
 --> statement-breakpoint
@@ -32,7 +37,7 @@ CREATE TABLE `users` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
 	`email` text NOT NULL,
-	`created_at` integer DEFAULT '"2024-06-22T16:21:58.024Z"' NOT NULL,
+	`created_at` integer NOT NULL,
 	`updated_at` integer NOT NULL
 );
 --> statement-breakpoint

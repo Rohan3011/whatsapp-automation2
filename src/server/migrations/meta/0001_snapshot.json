@@ -1,9 +1,59 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "e596bb8c-712a-4f90-9227-1c33cf902e4a",
-  "prevId": "100574e6-499e-4e04-a601-3649c2d11b39",
+  "id": "44a16997-fce9-413c-a44a-389b197310b0",
+  "prevId": "4dd83df4-2dd1-4630-99ca-1521a974b34d",
   "tables": {
+    "people_to_relations": {
+      "name": "people_to_relations",
+      "columns": {
+        "person_id": {
+          "name": "person_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "relation_id": {
+          "name": "relation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "people_to_relations_person_id_people_id_fk": {
+          "name": "people_to_relations_person_id_people_id_fk",
+          "tableFrom": "people_to_relations",
+          "tableTo": "people",
+          "columnsFrom": [
+            "person_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "people_to_relations_relation_id_relations_id_fk": {
+          "name": "people_to_relations_relation_id_relations_id_fk",
+          "tableFrom": "people_to_relations",
+          "tableTo": "relations",
+          "columnsFrom": [
+            "relation_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "people": {
       "name": "people",
       "columns": {
@@ -40,13 +90,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
-        },
-        "relation_id": {
-          "name": "relation_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
           "autoincrement": false
         },
         "additional_info": {
@@ -121,15 +164,14 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "'Sat Jun 22 2024'"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -169,8 +211,7 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "'\"2024-06-22T17:07:32.168Z\"'"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
@@ -214,8 +255,7 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "'\"2024-06-22T17:07:32.209Z\"'"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
