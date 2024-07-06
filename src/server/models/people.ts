@@ -1,5 +1,7 @@
+import { relations, sql } from "drizzle-orm";
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { v4 } from "uuid";
+import { peopleToRelationTypeTable } from "./people-to-relation-types";
 
 export const peopleTable = sqliteTable("people", {
   id: text("id")
@@ -19,12 +21,13 @@ export const peopleTable = sqliteTable("people", {
   company: text("company"),
   socialLink: text("social_link"),
   ex: integer("ex", { mode: "boolean" }),
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: text("created_at")
     .notNull()
-    .$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" })
+    .default(sql`(current_timestamp)`),
+  updatedAt: text("updated_at")
     .notNull()
-    .$onUpdate(() => new Date()),
+    .default(sql`(current_timestamp)`)
+    .$onUpdate(() => sql`(current_timestamp)`),
 });
 
 export type InsertPeople = typeof peopleTable.$inferInsert;

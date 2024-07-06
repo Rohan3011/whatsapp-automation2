@@ -9,6 +9,7 @@ import { authRouter } from "@/server/routes";
 import { userRouter } from "./routes/users";
 import { relationRouter } from "./routes/relations";
 import { peopleRouter } from "./routes/people";
+import { peopleRelationRouter } from "./routes/people-to-relations";
 
 type Variables = JwtVariables;
 
@@ -42,6 +43,7 @@ app.route("/auth", authRouter);
 app.route("/users", userRouter);
 app.route("/relations", relationRouter);
 app.route("/people", peopleRouter);
+app.route("/people_relations", peopleRelationRouter);
 
 export default app;
 export type AppType = typeof app;

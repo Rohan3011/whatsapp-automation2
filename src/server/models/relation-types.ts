@@ -1,13 +1,13 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { v4 } from "uuid";
 
-export const usersTable = sqliteTable("users", {
+export const relationTypesTable = sqliteTable("relation_types", {
   id: text("id")
     .primaryKey()
     .$default(() => v4()),
   name: text("name").notNull(),
-  email: text("email").notNull().unique(),
+  chapter: text("chapter"),
   createdAt: text("created_at")
     .notNull()
     .default(sql`(current_timestamp)`),
@@ -17,5 +17,5 @@ export const usersTable = sqliteTable("users", {
     .$onUpdate(() => sql`(current_timestamp)`),
 });
 
-export type InsertUser = typeof usersTable.$inferInsert;
-export type SelectUser = typeof usersTable.$inferSelect;
+export type InsertRelation = typeof relationTypesTable.$inferInsert;
+export type SelectRelation = typeof relationTypesTable.$inferSelect;

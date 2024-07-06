@@ -1,17 +1,21 @@
 import { Hono } from "hono";
 import { db } from "@/server/db";
 import { eq } from "drizzle-orm";
-import { relationTypesTable } from "@/server/models/relation-types";
+import { peopleToRelationTypeTable } from "@/server/models/people-to-relation-types";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
+import { peopleTable } from "../models/people";
+import { relationTypesTable } from "../models/relation-types";
 
-export const relationRouter = new Hono();
+const router = new Hono();
 
-relationRouter.post("/", async (c) => {
+export const peopleRelationRouter = router;
+
+router.post("/", async (c) => {
   const relation = await c.req.json();
   try {
     const result = await db
-      .insert(relationTypesTable)
+      .insert(peopleToRelationTypeTable)
       .values(relation)
       .returning();
     return c.json(result);
@@ -20,7 +24,7 @@ relationRouter.post("/", async (c) => {
   }
 });
 
-relationRouter.get(
+router.get(
   "/",
   zValidator(
     "query",
@@ -35,7 +39,16 @@ relationRouter.get(
     try {
       const relation = await db
         .select()
-        .from(relationTypesTable)
+        .from(peopleToRelationTypeTable)
+        .leftJoin(
+          peopleTable,
+          eq(peopleToRelationTypeTable.personId, peopleTable.id)
+        )
+        .leftJoin(
+          relationTypesTable,
+          eq(peopleToRelationTypeTable.relationTypeId, relationTypesTable.id)
+        )
+        .groupBy(peopleTable.id)
         .limit(limit)
         .offset(page * limit);
 
@@ -50,13 +63,13 @@ relationRouter.get(
   }
 );
 
-relationRouter.get("/:id", async (c) => {
+router.get("/:id", async (c) => {
   const id = c.req.param("id");
   try {
     const relation = await db
       .select()
-      .from(relationTypesTable)
-      .where(eq(relationTypesTable.id, id))
+      .from(peopleToRelationTypeTable)
+      .where(eq(peopleToRelationTypeTable.id, id))
       .limit(1);
 
     if (relation) {
