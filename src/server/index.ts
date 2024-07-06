@@ -10,6 +10,8 @@ import { userRouter } from "./routes/users";
 import { relationRouter } from "./routes/relations";
 import { peopleRouter } from "./routes/people";
 import { peopleRelationRouter } from "./routes/people-to-relations";
+import { eventTypesRouter } from "./routes/events-types";
+import { eventsRouter } from "./routes/events";
 
 type Variables = JwtVariables;
 
@@ -44,6 +46,8 @@ app.route("/users", userRouter);
 app.route("/relations", relationRouter);
 app.route("/people", peopleRouter);
 app.route("/people_relations", peopleRelationRouter);
+app.route("/events", eventsRouter.getRouter());
+app.route("/event_types", eventTypesRouter.getRouter());
 
 export default app;
 export type AppType = typeof app;

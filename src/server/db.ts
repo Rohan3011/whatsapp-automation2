@@ -6,3 +6,4 @@ config({ path: ".env" });
 
 const sqlite = new Database("database.db");
 export const db = drizzle(sqlite);
+export type DatabaseType = typeof db;

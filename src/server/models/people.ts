@@ -1,7 +1,6 @@
 import { relations, sql } from "drizzle-orm";
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { v4 } from "uuid";
-import { peopleToRelationTypeTable } from "./people-to-relation-types";
 
 export const peopleTable = sqliteTable("people", {
   id: text("id")
