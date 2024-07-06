@@ -37,7 +37,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import DashboardEventList from "@/components/DashboardEventList";
 import { cn } from "@/lib/utils";
-import { logout } from "@/services/auth-service";
+// import { logout } from "@/services/auth-service";
 import Logo from "./Logo";
 
 const navLinks = [
@@ -79,7 +79,7 @@ export default function DashboardLayout({
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
+    // logout();
     navigate("/login");
   };
 

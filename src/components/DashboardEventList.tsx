@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { pb } from "@/lib/pocketbase";
+// import { pb } from "@/lib/pocketbase";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { formatDate } from "@/utils/date";
@@ -35,9 +35,7 @@ export default function DashboardEventList() {
   const { data: events, isLoading } = useQuery({
     queryKey: ["events"],
     queryFn: () => {
-      return pb.collection("events").getFullList({
-        expand: "person, person.relation",
-      });
+      return;
     },
   });
 

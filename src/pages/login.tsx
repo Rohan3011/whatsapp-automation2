@@ -12,8 +12,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { loginWithPassword } from "@/services/auth-service";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
+// import { loginWithPassword } from "@/services/auth-service";
 
 const LoginPage = () => {
   const {
@@ -23,13 +23,15 @@ const LoginPage = () => {
   } = useForm<FormFields>({
     resolver: zodResolver(contactFormSchema),
   });
-  const navigate = useNavigate();
+
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      const resp = await loginWithPassword(data.email, data.password);
+      // const resp = await loginWithPassword(data.email, data.password);
+      const resp = await new Promise((res) => res);
       console.log(resp);
-      navigate("/dashboard");
+      router.push("/dashboard");
     } catch (error) {
       console.log(error);
     }
