@@ -1,5 +1,5 @@
 import { Hono, Context } from "hono";
-import { Table } from "drizzle-orm";
+import { count, Table } from "drizzle-orm";
 import { eq } from "drizzle-orm/expressions";
 import { z, ZodSchema } from "zod";
 import { DatabaseType } from "@/server/db";
@@ -91,15 +91,20 @@ class CrudRouter<T> {
   }
 
   async list(c: Context) {
-    const page = c.req.query("page") ? parseInt(c.req.query("page")!) : 0;
+    const page = c.req.query("page") ? parseInt(c.req.query("page")!) : 1;
     const limit = c.req.query("limit") ? parseInt(c.req.query("limit")!) : 10;
+    const search = c.req.query("search");
 
     try {
+      const [totalRows] = await this.db
+        .select({ count: count() })
+        .from(this.table);
+
       let query = this.db
         .select()
         .from(this.table)
         .limit(limit)
-        .offset(page * limit);
+        .offset((page - 1) * limit);
 
       // Check if populate parameter exists
       const populate = c.req.query("populate");
@@ -125,7 +130,10 @@ class CrudRouter<T> {
       }
 
       const items = await query;
-      return c.json({ data: items, pagination: { page, limit } });
+      return c.json({
+        data: items,
+        pagination: { page, limit, total: totalRows.count },
+      });
     } catch (error) {
       return c.json({ message: "Failed to retrieve resources", error }, 500);
     }
